@@ -23394,44 +23394,96 @@ const countries = [
     capitalInfo: { latlng: [4.71, -74.07] },
   },
 ];
+//Filtro de los paises que son independientes
+const independentCountries = countries.filter(country => country.independent === true);
+
+//Map para guardar la info necesaria y omitir lo otro
+const countriesTransformed = independentCountries.map((independentCountry) => {
+  const countryTransformed = {
+    countryNameOfficial: independentCountry.name.official,
+    countryNameCommon: independentCountry.name.common,
+    countryFlagPNG: independentCountry.flags.png,
+    countryTimezone: independentCountry.timezones,
+    countryMap: independentCountry.maps.googleMaps,
+  }
+  return countryTransformed;
+});
+console.log({countriesTransformed});
 
 const $cards = document.getElementById("cards");
-// const fragment = document.createDocumentFragment();
+const fragment = document.createDocumentFragment();
 
 function paintDom(countriesDom){
     const div = document.createElement("div");
     div.classList.add("card");
     div.innerHTML = `
     <div class="card h-210">
-        <h2>${countriesDom.name.official}</h2>
+        <h2>${countriesDom.countryNameOfficial}</h2>
         <div class="card-body card__info">
             <div class="card__description d-flex flex-column">
                 <div class="card__name">
-                    <i><img src="${countriesDom.flags.png}" alt="Bandera ${countriesDom.name.common}"></i>
-                    <h3>${countriesDom.name.common}</h3>
+                    <i><img src="${countriesDom.countryFlagPNG}" alt="Bandera ${countriesDom.countryNameCommon}"></i>
+                    <h3>${countriesDom.countryNameCommon}</h3>
                 </div>
     
                 <div class="card__time">
                     <i class="fa-solid fa-clock"></i>
-                    <p class="card__timezone">${countriesDom.timezones.join("\n")}</p>
+                    <p class="card__timezone">${countriesDom.countryTimezone.join("\n")}</p>
                 </div>
     
                 <div>
                     <i class="fa-solid fa-map-location-dot"></i>
-                    <a href="${countriesDom.maps.googleMaps}" target="_blank">See in maps</a>
+                    <a href="${countriesDom.countryMap}" target="_blank">See in maps</a>
                 </div>
             </div>
             <div class="card__image d-flex flex-column align-items-center">
-                <img src="${countriesDom.flags.png}" alt="Bandera ${countriesDom.name.common}">
+                <img src="${countriesDom.countryFlagPNG}" alt="Bandera ${countriesDom.countryNameCommon}">
             </div>
         </div>
     </div>
     `
-    $cards.appendChild(div);
-    // fragment.appendChild(div);
-    // $cards.appendChild(fragment);
+    fragment.appendChild(div);
+    $cards.appendChild(fragment);
 };
-
-countries.forEach((event)=>{
-    paintDom(event)
+countriesTransformed.forEach((event)=>{
+  paintDom(event)
 });
+
+//*Código anterior
+/* function paintDom(countriesDom){
+  const div = document.createElement("div");
+  div.classList.add("card");
+  div.innerHTML = `
+  <div class="card h-210">
+      <h2>${countriesDom.name.official}</h2>
+      <div class="card-body card__info">
+          <div class="card__description d-flex flex-column">
+              <div class="card__name">
+                  <i><img src="${countriesDom.flags.png}" alt="Bandera ${countriesDom.name.common}"></i>
+                  <h3>${countriesDom.name.common}</h3>
+              </div>
+  
+              <div class="card__time">
+                  <i class="fa-solid fa-clock"></i>
+                  <p class="card__timezone">${countriesDom.timezones.join("\n")}</p>
+              </div>
+  
+              <div>
+                  <i class="fa-solid fa-map-location-dot"></i>
+                  <a href="${countriesDom.maps.googleMaps}" target="_blank">See in maps</a>
+              </div>
+          </div>
+          <div class="card__image d-flex flex-column align-items-center">
+              <img src="${countriesDom.flags.png}" alt="Bandera ${countriesDom.name.common}">
+          </div>
+      </div>
+  </div>
+  `
+  $cards.appendChild(div);
+  // fragment.appendChild(div);
+  // $cards.appendChild(fragment);
+}; */
+
+/* countries.forEach((event)=>{
+    paintDom(event)
+}); */
